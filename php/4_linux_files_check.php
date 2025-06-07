@@ -155,10 +155,6 @@ final class FileCheckService
                     'дополнительные_проверки' => ['json_valid'],
                 ],
             ],
-            'файл_curl_сертификата' => [
-                'путь' => implode(DIRECTORY_SEPARATOR, ['curl_cert', 'cacert.pem']),
-                'опции' => [],
-            ],
             'файл_pac' => [
                 'путь' => 'local.pac',
                 'опции' => [

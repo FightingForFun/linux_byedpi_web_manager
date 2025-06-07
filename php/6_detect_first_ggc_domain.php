@@ -36,17 +36,6 @@ final class GgcDetector
     private const GGC_DOMAIN_TEMPLATE = 'https://rr1---sn-%s.googlevideo.com';
     private const MAX_ATTEMPTS = 2;
 
-    private function getCertificatePath(): string
-    {
-        $certFile = __DIR__ . '/../curl_cert/cacert.pem';
-        
-        if (!file_exists($certFile)) {
-            throw new RuntimeException('Файл сертификатов не найден', 500);
-        }
-        
-        return $certFile;
-    }
-
     public function detect(): string
     {
         $ch = curl_init();
@@ -54,8 +43,6 @@ final class GgcDetector
             throw new RuntimeException('Не удалось инициализировать CURL');
         }
 
-        $certPath = $this->getCertificatePath();
-        
         $lastError = null;
         try {
             foreach (self::SOURCE_URLS as $url) {
@@ -72,7 +59,6 @@ final class GgcDetector
                     CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
                     CURLOPT_SSL_VERIFYPEER => $isHttps,
                     CURLOPT_SSL_VERIFYHOST => $isHttps ? 2 : 0,
-                    CURLOPT_CAINFO => $isHttps ? $certPath : null,
                 ]);
 
                 for ($attempt = 1; $attempt <= self::MAX_ATTEMPTS; $attempt++) {

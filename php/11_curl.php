@@ -238,7 +238,6 @@ final class CurlExecutor
         }
         return self::USER_AGENTS[$id];
     }
-
 }
 
 try {

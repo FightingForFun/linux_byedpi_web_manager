@@ -159,7 +159,6 @@ final class CurlExecutor
 
     public function execute(array $data): array
     {
-        $certPath = $this->getCertificatePath();
         $ch = curl_init();
         if ($ch === false) {
             throw new RuntimeException('Ошибка инициализации CURL', 500);
@@ -193,7 +192,6 @@ final class CurlExecutor
                 CURLOPT_HEADER => true,
                 CURLOPT_SSL_VERIFYPEER => true,
                 CURLOPT_SSL_VERIFYHOST => 2,
-                CURLOPT_CAINFO => $certPath,
                 CURLOPT_USERAGENT => $userAgent,
                 CURLOPT_FOLLOWLOCATION => false,
                 CURLOPT_MAXREDIRS => 0,
@@ -241,16 +239,6 @@ final class CurlExecutor
         return self::USER_AGENTS[$id];
     }
 
-    private function getCertificatePath(): string
-    {
-        $certFile = __DIR__ . '/../curl_cert/cacert.pem';
-        
-        if (!file_exists($certFile)) {
-            throw new RuntimeException('Файл сертификатов не найден', 500);
-        }
-        
-        return $certFile;
-    }
 }
 
 try {

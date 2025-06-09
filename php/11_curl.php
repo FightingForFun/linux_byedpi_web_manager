@@ -122,7 +122,7 @@ final class RequestValidator
     
     private function validateTlsVersion(mixed $value): void
     {
-        $validVersions = ['default', 'tls1-0', 'tls1-1', 'tls1-2', 'tls1-3'];
+        $validVersions = ['default', 'tls1-2', 'tls1-3'];
         if (!is_string($value) || !in_array($value, $validVersions, true)) {
             throw new RuntimeException('Недопустимая версия TLS', 400);
         }
@@ -172,13 +172,23 @@ final class CurlExecutor
                 default => null
             };
             
-            $tlsVersion = match ($data['curl_tls_version'] ?? null) {
-                'tls1-0' => CURL_SSLVERSION_TLSv1_0,
-                'tls1-1' => CURL_SSLVERSION_TLSv1_1,
-                'tls1-2' => CURL_SSLVERSION_TLSv1_2,
-                'tls1-3' => CURL_SSLVERSION_TLSv1_3,
-                default => null
-            };              
+        $tlsVersion = null;
+        $tlsSetting = $data['curl_tls_version'];
+
+        if ($tlsSetting === 'tls1-2') {
+            if (defined('CURL_SSLVERSION_TLSv1_2') && defined('CURL_SSLVERSION_MAX_TLSv1_2')) {
+                $tlsVersion = CURL_SSLVERSION_TLSv1_2 | CURL_SSLVERSION_MAX_TLSv1_2;
+            } else {
+                throw new RuntimeException('CURL не поддерживает строгую версию TLS 1.2', 500);
+            }
+        }
+        elseif ($tlsSetting === 'tls1-3') {
+            if (defined('CURL_SSLVERSION_TLSv1_3') && defined('CURL_SSLVERSION_MAX_TLSv1_3')) {
+                $tlsVersion = CURL_SSLVERSION_TLSv1_3 | CURL_SSLVERSION_MAX_TLSv1_3;
+            } else {
+                throw new RuntimeException('CURL не поддерживает строгую версию TLS 1.3', 500);
+            }
+        }
             
             $userAgent = $this->getUserAgent((int)$data['curl_user_agent']);
             

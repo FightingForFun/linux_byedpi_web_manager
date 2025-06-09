@@ -8,7 +8,7 @@ ByeDPI Web Manager (для Linux / Docker)
 Требования:
 - PHP версии 8.0.0 и выше.
 - Включённые PHP расширения curl и openssl.
-- Используются также: file_get_contents, file_put_contents, file, chmod, exec, shell_exec, readlink, но они в большинстве случаев включены "по умолчанию".
+- Используются также функции: file_get_contents, file_put_contents, file, chmod, exec, shell_exec, readlink, но они в большинстве случаев включены "по умолчанию".
 - Установленный "полный" LSOF (не из BusyBox).
 - Используются также: nohup, kill, чтение /proc, но они в большинстве случаев включены "по умолчанию".
 - Установленные и обновлённые ca-certificates.

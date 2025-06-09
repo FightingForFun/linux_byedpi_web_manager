@@ -32,27 +32,27 @@ final class LinuxToolsChecker
         }
     }
 	
-	public function checkFullLsof(): bool
+    public function checkFullLsof(): bool
     {
         try {
             if (!$this->checkCommand('lsof')) {
                 return false;
             }
 
-            $output = [];
-            $exitCode = null;
-            
-            exec("lsof 2>&1", $output, $exitCode);
-            $outputString = implode("\n", $output);
-
-            if (stripos($outputString, 'BusyBox') !== false) {
-                return false;
-            }
-            
-            exec("lsof --help 2>&1", $output, $exitCode);
-            $outputString = implode("\n", $output);
-            
-            return (stripos($outputString, 'BusyBox') === false);
+            $outputV = [];
+            exec("lsof -v 2>&1", $outputV, $exitCodeV);
+        
+            $outputH = [];
+            exec("lsof -h 2>&1", $outputH, $exitCodeH);
+        
+            $outputVString = implode("\n", $outputV);
+            $outputHString = implode("\n", $outputH);
+        
+            $isVersionInfo = preg_match('/lsof version information:|revision:|copyright notice:/i', $outputVString);
+        
+            $isHelpInfo = preg_match('/usage:|options:|-- end option scan/i', $outputHString);
+        
+            return $isVersionInfo || $isHelpInfo;
         } catch (Throwable $e) {
             return false;
         }
@@ -80,8 +80,11 @@ final class LinuxToolsChecker
             if (!$this->checkProcMounted()) {
                 return false;
             }
-            
-            return is_readable($file) && is_file($file);
+        
+            return $file === '/proc/self/exe' 
+                || $file === '/proc/self/cmdline'
+                ? (is_readable($file) && is_file($file))
+                : false;
         } catch (Throwable $e) {
             return false;
         }

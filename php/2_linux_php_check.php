@@ -1,5 +1,5 @@
 <?php
-//2_linux_php_check.php
+// 2_linux_php_check.php
 declare(strict_types=1);
 set_time_limit(60);
 ini_set('display_errors', '0');

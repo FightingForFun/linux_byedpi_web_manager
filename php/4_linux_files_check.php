@@ -1,5 +1,5 @@
 <?php
-//4_linux_files_check.php
+// 4_linux_files_check.php
 declare(strict_types=1);
 set_time_limit(60);
 ini_set('display_errors', '0');
@@ -199,7 +199,7 @@ try {
     }
 
     $basePath = dirname(__DIR__);
-    
+
     $checker = new FileChecker($basePath);
     $service = new FileCheckService($checker);
 

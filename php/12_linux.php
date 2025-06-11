@@ -1,5 +1,5 @@
 <?php
-//12_linux.php
+// 12_linux.php
 declare(strict_types=1);
 set_time_limit(60);
 ini_set('display_errors', '0');
@@ -77,15 +77,15 @@ function start_process(string $real_file_path, string $ip_for_run, int $port, st
     if (!empty($ip_for_run) && !filter_var($ip_for_run, FILTER_VALIDATE_IP)) {
         return ['ошибка' => 'Неверный формат IP-адреса.'];
     }
-    
+
     $command = "nohup \"$real_file_path\" --port $port";
-    
+
     if (!empty($ip_for_run)) {
         $command .= " --ip $ip_for_run";
     }
-    
+
     $command .= " $args > /dev/null 2>&1 & echo \$!";
-    
+
     exec($command, $output, $status);
     if ($status !== 0) {
         return ['ошибка' => 'Ошибка запуска: ' . implode("\n", $output)];
@@ -136,12 +136,12 @@ function validate_request_data(array $data): array {
     if ($hosts_file_name !== null && !is_string($hosts_file_name)) {
         return ['ошибка' => 'Имя файла hosts должно быть строкой.'];
     }
-    
+
     $ip_for_run = $data['ip_для_запуска'] ?? '';
     if (!is_string($ip_for_run)) {
         return ['ошибка' => 'IP для запуска должен быть строкой.'];
     }
-    
+
     return [
         'действие' => $action,
         'реальный_полный_путь' => $real_file_path,
@@ -296,14 +296,14 @@ switch ($action) {
                 'результат' => false
             ], 200);
         }
-        
+
         $start_result = start_process(
             $real_file_path,
             $validation['ip_для_запуска'],
             $port,
             $args
         );
-        
+
         if (isset($start_result['ошибка'])) {
             send_json_response(['ошибка' => true, 'сообщение' => $start_result['ошибка']], 500);
         }
@@ -345,5 +345,3 @@ switch ($action) {
     default:
         send_json_response(['ошибка' => true, 'сообщение' => 'Неизвестное действие'], 400);
 }
-
-?>

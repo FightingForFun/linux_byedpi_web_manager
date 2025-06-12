@@ -115,7 +115,7 @@ Docker:
   - http://{docker_ip}:20000/ 
 
 Интерфейс:
-- Можно посмотреть в screenshot.png
+- Можно посмотреть в https://github.com/FightingForFun/linux_byedpi_web_manager/blob/main/screenshot.png
 
 Обсуждение:
 - тут в Discussions или в: https://ntc.party/t/byedpi-web-manager-windows-linux/16575

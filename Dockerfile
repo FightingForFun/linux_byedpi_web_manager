@@ -42,7 +42,7 @@ RUN mkdir -p /var/www/html/byedpi && \
         x86_64) \
             curl -L -o byedpi.tar.gz "https://github.com/hufrea/byedpi/releases/download/v0.17/byedpi-17-x86_64.tar.gz" ;; \
         *) \
-            echo "ОШИБКА: Не указана или неподдерживаемая архитектура (ARCH=$ARCH). Поддерживаемые: aarch64, armv6, armv7l, mips, mipsel, powerpc, x86_64" >&2 ; \
+            echo "ОШИБКА: Не указана или неподдерживаемая архитектура (ARCH=$ARCH). Поддерживаемые: aarch64, armv6, armv7l, x86_64" >&2 ; \
             exit 1 ;; \
     esac && \
     tar -xzf byedpi.tar.gz && \

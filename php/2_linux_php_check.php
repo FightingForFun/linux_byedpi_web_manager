@@ -1,20 +1,25 @@
 <?php
-// 2_linux_php_check.php
 declare(strict_types=1);
 set_time_limit(60);
 ini_set('display_errors', '0');
 error_reporting(0);
 
-header("Access-Control-Allow-Origin: *");
-header("Access-Control-Allow-Methods: GET");
-header("Access-Control-Allow-Headers: Content-Type");
-header("Cache-Control: no-store, no-cache, must-revalidate");
-header("Pragma: no-cache");
+header('Access-Control-Allow-Origin: *');
+header('Access-Control-Allow-Methods: GET, POST, OPTIONS');
+header('Access-Control-Allow-Headers: Content-Type');
+header('Cache-Control: no-store, no-cache, must-revalidate');
+header('Pragma: no-cache');
 header('Content-Type: application/json; charset=utf-8');
 header('X-Content-Type-Options: nosniff');
 header('X-Frame-Options: DENY');
+header('X-XSS-Protection: 1; mode=block');
 
-final class PhpFeatureChecker
+if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
+    http_response_code(204);
+    exit;
+}
+
+final class LinuxPhpFeatureChecker
 {
     private ?array $disabledFunctions = null;
 
@@ -97,7 +102,7 @@ final class PhpFeatureChecker
 }
 
 try {
-    $checker = new PhpFeatureChecker();
+    $checker = new LinuxPhpFeatureChecker();
     http_response_code(200);
     echo json_encode(
         [
@@ -111,7 +116,7 @@ try {
     echo json_encode(
         [
             'результат' => false,
-            'сообщение' => $e->getMessage(),
+            'сообщение' => 'Ошибка сервера: ' . $e->getMessage()
         ],
         JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE
     );

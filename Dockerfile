@@ -23,6 +23,7 @@ RUN rm -f /var/www/html/byedpi/ciadpi
 COPY --chown=lighttpd:lighttpd css /var/www/html/css
 COPY --chown=lighttpd:lighttpd js /var/www/html/js
 COPY --chown=lighttpd:lighttpd php /var/www/html/php
+COPY --chown=lighttpd:lighttpd fonts /var/www/html/fonts
 COPY --chown=lighttpd:lighttpd config.json /var/www/html
 COPY --chown=lighttpd:lighttpd favicon.ico /var/www/html
 COPY --chown=lighttpd:lighttpd index.html /var/www/html
